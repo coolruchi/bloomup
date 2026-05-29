@@ -1,0 +1,529 @@
+<%- include('../partials/header', { title: 'AI Voice Agent', bodyClass: 'no-footer-padding' }) %>
+
+<div class="voice-layout">
+
+  <!-- ===== LEFT PANEL: CONFIG ===== -->
+  <div class="voice-panel">
+    <div class="builder-panel-header">
+      <h2>🎙 Configure Your AI Agent</h2>
+      <p>Set it up, then test it live below</p>
+    </div>
+    <div class="builder-panel-body" style="padding:1.5rem">
+
+      <!-- Industry & Name -->
+      <div class="builder-section">
+        <div class="builder-section-header open" onclick="toggleSection(this)">
+          <span>🏢 Step 1 — Your Business</span><span class="arrow">▼</span>
+        </div>
+        <div class="builder-section-body open">
+          <div class="form-group">
+            <label class="form-label">Business Name *</label>
+            <input type="text" id="vBusinessName" class="form-input" placeholder="e.g. Mike's Plumbing" oninput="refreshAgent()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Industry</label>
+            <select id="vIndustry" class="form-select" onchange="loadIndustryDefaults()">
+              <option value="plumbing">Plumbing / HVAC</option>
+              <option value="electrical">Electrician</option>
+              <option value="roofing">Roofing / General Contracting</option>
+              <option value="salon">Hair Salon / Spa</option>
+              <option value="cleaning">Cleaning Service</option>
+              <option value="landscaping">Landscaping / Lawn Care</option>
+              <option value="auto">Auto Repair</option>
+              <option value="restaurant">Restaurant</option>
+              <option value="medical">Medical / Dental</option>
+              <option value="gym">Fitness / Gym</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Agent Name (what the AI calls itself)</label>
+            <input type="text" id="vAgentName" class="form-input" placeholder="e.g. Aria" value="Aria" oninput="refreshAgent()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Voice Persona -->
+      <div class="builder-section">
+        <div class="builder-section-header open" onclick="toggleSection(this)">
+          <span>🗣 Step 2 — Voice Persona</span><span class="arrow">▼</span>
+        </div>
+        <div class="builder-section-body open">
+          <div class="persona-grid">
+            <div class="persona-card selected" data-persona="professional-female" onclick="selectPersona('professional-female', this)">
+              <div class="persona-emoji">👩‍💼</div>
+              <div class="persona-name">Professional</div>
+            </div>
+            <div class="persona-card" data-persona="friendly-female" onclick="selectPersona('friendly-female', this)">
+              <div class="persona-emoji">😊</div>
+              <div class="persona-name">Friendly</div>
+            </div>
+            <div class="persona-card" data-persona="professional-male" onclick="selectPersona('professional-male', this)">
+              <div class="persona-emoji">👨‍💼</div>
+              <div class="persona-name">Formal</div>
+            </div>
+            <div class="persona-card" data-persona="energetic" onclick="selectPersona('energetic', this)">
+              <div class="persona-emoji">⚡</div>
+              <div class="persona-name">Energetic</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="builder-section">
+        <div class="builder-section-header" onclick="toggleSection(this)">
+          <span>🛠 Step 3 — Services to Mention</span><span class="arrow">▼</span>
+        </div>
+        <div class="builder-section-body">
+          <div class="services-chips" id="vServicesChips"></div>
+          <div style="display:flex;gap:0.5rem">
+            <input type="text" id="vServiceInput" class="form-input" placeholder="Add a service..." style="flex:1" onkeydown="if(event.key==='Enter'){addVService();event.preventDefault()}">
+            <button class="btn btn-primary btn-sm" onclick="addVService()">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQs -->
+      <div class="builder-section">
+        <div class="builder-section-header" onclick="toggleSection(this)">
+          <span>❓ Step 4 — FAQs (up to 5)</span><span class="arrow">▼</span>
+        </div>
+        <div class="builder-section-body">
+          <div id="faqList"></div>
+          <button class="btn btn-ghost btn-sm w-full mt-sm" onclick="addFAQ()" id="addFaqBtn">+ Add FAQ</button>
+        </div>
+      </div>
+
+      <!-- Business Hours -->
+      <div class="builder-section">
+        <div class="builder-section-header" onclick="toggleSection(this)">
+          <span>🕐 Step 5 — Business Hours</span><span class="arrow">▼</span>
+        </div>
+        <div class="builder-section-body">
+          <div class="grid-2" style="gap:0.75rem">
+            <div class="form-group">
+              <label class="form-label">Mon–Fri</label>
+              <input type="text" id="vHoursWeekday" class="form-input" value="8:00 AM – 6:00 PM" oninput="refreshAgent()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Saturday</label>
+              <input type="text" id="vHoursSat" class="form-input" value="9:00 AM – 3:00 PM" oninput="refreshAgent()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sunday</label>
+            <input type="text" id="vHoursSun" class="form-input" value="Closed" oninput="refreshAgent()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone demo -->
+      <div class="phone-demo-card">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+          <div style="width:42px;height:42px;background:var(--grad-accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem">📞</div>
+          <div>
+            <div style="font-weight:700;font-size:0.95rem">Request Live Call Demo</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Receive an actual AI call on your phone</div>
+          </div>
+        </div>
+        <div class="phone-input-row">
+          <div class="form-group">
+            <label class="form-label">Your Phone Number</label>
+            <input type="tel" id="demoPhone" class="form-input" placeholder="+1 (905) 555-0100">
+          </div>
+          <button class="btn btn-accent" style="height:44px;margin-top:1.5rem;color:#0a0a0f;white-space:nowrap" onclick="requestCall()">
+            Call Me Now
+          </button>
+        </div>
+        <p class="form-hint" style="margin-top:0.5rem">⚠️ Requires Twilio API keys. Your name & number saved as a lead.</p>
+      </div>
+
+      <!-- Save config -->
+      <div style="padding:1rem 0;border-top:1px solid var(--border-subtle);margin-top:1rem">
+        <% if (user) { %>
+          <button class="btn btn-primary w-full btn-lg" onclick="saveConfig()">💾 Save Agent Config</button>
+        <% } else { %>
+          <a href="/auth/register?redirect=/voice-agent" class="btn btn-primary w-full btn-lg" style="display:flex;justify-content:center">
+            💾 Save My Agent Config
+          </a>
+        <% } %>
+        <a href="/#contact" class="btn btn-ghost w-full mt-sm" style="display:flex;justify-content:center">
+          📩 Get This Set Up For Me →
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== RIGHT: LIVE DEMO ===== -->
+  <div class="voice-preview">
+    <!-- Agent Card -->
+    <div style="background:linear-gradient(135deg,rgba(6,214,160,0.08),rgba(124,58,237,0.08));border:1px solid var(--border-primary);border-radius:20px;padding:1.75rem;margin-bottom:1.5rem">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem">
+        <div style="width:54px;height:54px;background:var(--grad-accent);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:var(--shadow-accent)">🤖</div>
+        <div>
+          <h3 style="font-size:1.1rem" id="agentDisplayName">Aria</h3>
+          <p style="font-size:0.82rem;color:var(--bloom-accent)">AI Voice Receptionist · Ready</p>
+        </div>
+        <div class="badge badge-accent" style="margin-left:auto">● Live Preview</div>
+      </div>
+      <div id="agentGreeting" style="background:rgba(0,0,0,0.2);border-radius:10px;padding:1rem;font-size:0.87rem;color:var(--text-secondary);border-left:3px solid var(--bloom-accent);line-height:1.6;font-style:italic">
+        "Hi there! Thanks for calling. I'm Aria, the virtual assistant for Your Business. How can I help you today?"
+      </div>
+    </div>
+
+    <!-- Conversation Window -->
+    <div class="convo-window">
+      <div class="convo-header">
+        <div class="convo-agent-avatar" id="convoAvatar">🤖</div>
+        <div class="convo-agent-info">
+          <h4 id="convoAgentName">Aria</h4>
+          <p id="convoBusinessName">Your Business · AI Receptionist</p>
+        </div>
+        <div class="convo-status">
+          <div class="status-dot"></div> Online 24/7
+        </div>
+      </div>
+
+      <div class="convo-messages" id="convoMessages">
+        <!-- Messages injected here -->
+      </div>
+
+      <div class="convo-input-area">
+        <input type="text" id="convoInput" class="convo-input" placeholder="Type something — e.g. 'I need a quote'" onkeydown="if(event.key==='Enter')sendMessage()">
+        <button class="btn btn-accent btn-sm" onclick="sendMessage()" style="color:#0a0a0f;flex-shrink:0">Send</button>
+        <button class="btn btn-ghost btn-sm" onclick="resetConvo()" title="Restart">↺</button>
+      </div>
+    </div>
+
+    <!-- Capabilities -->
+    <div style="margin-top:1.5rem">
+      <h4 style="font-size:0.82rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1rem">What this agent can do</h4>
+      <div class="grid-2" style="gap:0.75rem" id="capabilitiesGrid">
+        <div style="background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:10px;padding:1rem;display:flex;gap:0.6rem">
+          <span style="font-size:1.1rem">📅</span>
+          <div><div style="font-size:0.82rem;font-weight:600">Appointment Booking</div><div style="font-size:0.76rem;color:var(--text-muted)">Syncs with your calendar</div></div>
+        </div>
+        <div style="background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:10px;padding:1rem;display:flex;gap:0.6rem">
+          <span style="font-size:1.1rem">🎯</span>
+          <div><div style="font-size:0.82rem;font-weight:600">Lead Qualification</div><div style="font-size:0.76rem;color:var(--text-muted)">Collects key details first</div></div>
+        </div>
+        <div style="background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:10px;padding:1rem;display:flex;gap:0.6rem">
+          <span style="font-size:1.1rem">💬</span>
+          <div><div style="font-size:0.82rem;font-weight:600">FAQ Answering</div><div style="font-size:0.76rem;color:var(--text-muted)">Handles top questions</div></div>
+        </div>
+        <div style="background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:10px;padding:1rem;display:flex;gap:0.6rem">
+          <span style="font-size:1.1rem">🔄</span>
+          <div><div style="font-size:0.82rem;font-weight:600">Human Handoff</div><div style="font-size:0.76rem;color:var(--text-muted)">Transfers when needed</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ===========================
+// STATE
+// ===========================
+let vServices = ['Free Estimates', 'Emergency Service', '24/7 Availability'];
+let faqs = [
+  { q: 'Do you offer free estimates?', a: 'Yes! We provide free, no-obligation estimates for all our services.' },
+  { q: 'Are you licensed and insured?', a: 'Absolutely. We are fully licensed and insured for your peace of mind.' }
+];
+let selectedPersona = 'professional-female';
+let conversationHistory = [];
+
+const INDUSTRY_DEFAULTS = {
+  plumbing: { services: ['Emergency Plumbing','Drain Cleaning','Water Heater','Pipe Repair','Leak Detection'], faqs: [{q:'Do you handle emergencies?',a:'Yes, we offer 24/7 emergency plumbing services.'},{q:'How quickly can you arrive?',a:'We typically arrive within 60-90 minutes for emergencies.'}] },
+  electrical: { services: ['Panel Upgrades','Wiring','EV Chargers','Safety Inspections','Emergency Service'], faqs: [{q:'Are you a licensed electrician?',a:'Yes, fully licensed and insured in Ontario.'},{q:'Do you do residential and commercial?',a:'We handle both residential and commercial electrical work.'}] },
+  salon: { services: ['Haircuts','Color & Highlights','Blowouts','Keratin Treatment','Manicure/Pedicure'], faqs: [{q:'How do I book an appointment?',a:'You can book online or I can schedule one for you right now!'},{q:'How long does a color appointment take?',a:'Color appointments typically take 2-3 hours depending on the service.'}] },
+  cleaning: { services: ['Regular Cleaning','Deep Clean','Move-In/Out','Office Cleaning','Window Washing'], faqs: [{q:'Do you bring your own supplies?',a:'Yes, we provide all cleaning supplies and equipment.'},{q:'Are you insured?',a:'Fully insured with background-checked staff.'}] },
+  roofing: { services: ['Roof Replacement','Repairs','Inspections','Eavestroughs','Emergency Tarping'], faqs: [{q:'Do you offer free roof inspections?',a:'Yes! Free inspections and estimates for all residential roofing.'},{q:'How long does a roof replacement take?',a:'Most residential replacements take 1-2 days.'}] },
+};
+
+const PERSONA_STYLES = {
+  'professional-female': { emoji: '👩‍💼', tone: 'professional and courteous' },
+  'friendly-female': { emoji: '😊', tone: 'warm and friendly' },
+  'professional-male': { emoji: '👨‍💼', tone: 'formal and efficient' },
+  'energetic': { emoji: '⚡', tone: 'energetic and enthusiastic' }
+};
+
+// ===========================
+// UI HELPERS
+// ===========================
+function toggleSection(header) {
+  header.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
+}
+
+function selectPersona(id, el) {
+  document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPersona = id;
+  const p = PERSONA_STYLES[id];
+  document.getElementById('convoAvatar').textContent = p.emoji;
+  refreshAgent();
+}
+
+function getBusinessName() {
+  return document.getElementById('vBusinessName').value.trim() || 'Your Business';
+}
+function getAgentName() {
+  return document.getElementById('vAgentName').value.trim() || 'Aria';
+}
+
+function refreshAgent() {
+  const name = getAgentName();
+  const biz = getBusinessName();
+  document.getElementById('agentDisplayName').textContent = name;
+  document.getElementById('convoAgentName').textContent = name;
+  document.getElementById('convoBusinessName').textContent = biz + ' · AI Receptionist';
+  updateGreeting();
+}
+
+function updateGreeting() {
+  const name = getAgentName();
+  const biz = getBusinessName();
+  const industry = document.getElementById('vIndustry').value;
+  const hours = document.getElementById('vHoursWeekday')?.value || '8am-6pm';
+  const greetings = {
+    plumbing: `Hi there! Thanks for calling ${biz}. I'm ${name}, your virtual assistant. Are you calling about a plumbing issue or would you like to schedule a service?`,
+    electrical: `Hello! You've reached ${biz}. I'm ${name}, here to help. Are you looking to schedule electrical work or do you have an emergency?`,
+    salon: `Hi! Welcome to ${biz}! I'm ${name}. Would you like to book an appointment, or do you have a question about our services?`,
+    default: `Hi there! Thanks for calling ${biz}. I'm ${name}, your virtual assistant. How can I help you today?`
+  };
+  const greeting = greetings[industry] || greetings.default;
+  document.getElementById('agentGreeting').textContent = `"${greeting}"`;
+}
+
+// ===========================
+// INDUSTRY DEFAULTS
+// ===========================
+function loadIndustryDefaults() {
+  const industry = document.getElementById('vIndustry').value;
+  const defaults = INDUSTRY_DEFAULTS[industry];
+  if (defaults) {
+    vServices = [...defaults.services];
+    faqs = [...defaults.faqs];
+    renderVServices();
+    renderFAQs();
+  }
+  refreshAgent();
+}
+
+// ===========================
+// SERVICES
+// ===========================
+function renderVServices() {
+  const chips = document.getElementById('vServicesChips');
+  chips.innerHTML = vServices.map((s,i) => `
+    <div class="service-chip">${s}
+      <button class="service-chip-remove" onclick="removeVService(${i})">×</button>
+    </div>`).join('');
+}
+function addVService() {
+  const input = document.getElementById('vServiceInput');
+  const v = input.value.trim();
+  if (v && vServices.length < 8) { vServices.push(v); input.value = ''; renderVServices(); }
+}
+function removeVService(i) { vServices.splice(i,1); renderVServices(); }
+
+// ===========================
+// FAQS
+// ===========================
+function renderFAQs() {
+  const list = document.getElementById('faqList');
+  list.innerHTML = faqs.map((f,i) => `
+    <div class="faq-item">
+      <div class="faq-item-body">
+        <input class="form-input mb-sm" style="font-size:0.82rem;padding:0.4rem 0.7rem" value="${f.q}" oninput="faqs[${i}].q=this.value" placeholder="Question">
+        <input class="form-input" style="font-size:0.82rem;padding:0.4rem 0.7rem" value="${f.a}" oninput="faqs[${i}].a=this.value" placeholder="Answer">
+      </div>
+      <button class="faq-remove" onclick="removeFAQ(${i})">×</button>
+    </div>`).join('');
+  document.getElementById('addFaqBtn').style.display = faqs.length >= 5 ? 'none' : 'block';
+}
+function addFAQ() {
+  if (faqs.length < 5) { faqs.push({q:'',a:''}); renderFAQs(); }
+}
+function removeFAQ(i) { faqs.splice(i,1); renderFAQs(); }
+
+// ===========================
+// CHAT / CONVERSATION
+// ===========================
+function addMessage(role, text) {
+  const messages = document.getElementById('convoMessages');
+  const time = new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'});
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `
+    ${role === 'agent' ? `<div style="width:28px;height:28px;border-radius:50%;background:var(--grad-accent);display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0">${PERSONA_STYLES[selectedPersona].emoji}</div>` : ''}
+    <div class="msg-bubble">${text}</div>
+    <div class="msg-time">${time}</div>
+    ${role === 'user' ? `<div style="width:28px;height:28px;border-radius:50%;background:var(--grad-primary);display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0">👤</div>` : ''}
+  `;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function showTyping() {
+  const messages = document.getElementById('convoMessages');
+  const div = document.createElement('div');
+  div.className = 'msg agent'; div.id = 'typingIndicator';
+  div.innerHTML = `
+    <div style="width:28px;height:28px;border-radius:50%;background:var(--grad-accent);display:flex;align-items:center;justify-content:center;font-size:0.85rem">${PERSONA_STYLES[selectedPersona].emoji}</div>
+    <div class="msg-bubble" style="padding:0.65rem 1rem">
+      <div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+    </div>`;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+function removeTyping() { document.getElementById('typingIndicator')?.remove(); }
+
+function sendMessage() {
+  const input = document.getElementById('convoInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  addMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  showTyping();
+
+  const agentName = getAgentName();
+  const bizName = getBusinessName();
+  const industry = document.getElementById('vIndustry').value;
+  const hours = document.getElementById('vHoursWeekday')?.value || '8am–6pm Mon–Fri';
+
+  const systemPrompt = `You are ${agentName}, a professional AI receptionist for ${bizName}, a ${industry} business in Durham Region, Ontario.
+
+Your personality: ${PERSONA_STYLES[selectedPersona].tone}.
+
+Services offered: ${vServices.join(', ')}.
+Business hours: ${hours}.
+FAQs you know:
+${faqs.map(f => `Q: ${f.q}\nA: ${f.a}`).join('\n')}
+
+Rules:
+- Keep responses SHORT (2-3 sentences max) — you're on a phone call
+- Be natural and conversational, not robotic
+- If asked to book, ask for their name and preferred time
+- If it's an emergency, express urgency and offer to connect them immediately
+- End each response with a helpful follow-up question
+- Never make up information you don't have
+- You are demoing this product to a potential customer of BloomUp, so be impressive!`;
+
+  const messages = conversationHistory.map(m => ({ role: m.role, content: m.content }));
+
+  fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ system: systemPrompt, messages })
+  })
+  .then(r => r.json())
+  .then(res => {
+    removeTyping();
+    const reply = res.reply || "I'm sorry, I had trouble connecting. Please try again.";
+    conversationHistory.push({ role: 'assistant', content: reply });
+    addMessage('agent', reply);
+  })
+  .catch(() => {
+    removeTyping();
+    addMessage('agent', "Sorry, I'm having a brief issue. Please try again in a moment.");
+  });
+}
+
+// ===========================
+// PHONE CALL REQUEST
+// ===========================
+function requestCall() {
+  const phone = document.getElementById('demoPhone').value.trim();
+  if (!phone) { showToast('Please enter your phone number', 'error'); return; }
+
+  const btn = event.target;
+  btn.disabled = true; btn.textContent = 'Requesting...';
+
+  fetch('/voice-agent/request-call', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      phone,
+      agent_name: getAgentName(),
+      business_name: getBusinessName(),
+      industry: document.getElementById('vIndustry').value,
+      services: vServices,
+      faqs
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    btn.disabled = false; btn.textContent = 'Call Me Now';
+    if (res.success) {
+      showToast('📞 Calling you now! Answer in the next 30 seconds.', 'success', 8000);
+    } else {
+      showToast(res.error || 'Call service not configured yet. Add Twilio API keys to enable.', 'info', 6000);
+    }
+  })
+  .catch(() => {
+    btn.disabled = false; btn.textContent = 'Call Me Now';
+    showToast('Call service requires Twilio API configuration.', 'info', 5000);
+  });
+}
+
+// ===========================
+// SAVE CONFIG
+// ===========================
+function saveConfig() {
+  const data = {
+    agent_name: getAgentName(),
+    business_name: getBusinessName(),
+    industry: document.getElementById('vIndustry').value,
+    voice_persona: selectedPersona,
+    services: vServices,
+    faqs,
+    business_hours: {
+      weekday: document.getElementById('vHoursWeekday').value,
+      saturday: document.getElementById('vHoursSat').value,
+      sunday: document.getElementById('vHoursSun').value
+    }
+  };
+  fetch('/voice-agent/save', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(r => r.json())
+  .then(res => {
+    if (res.success) showToast('✓ Agent configuration saved!', 'success');
+    else showToast(res.error || 'Save failed', 'error');
+  });
+}
+
+// ===========================
+// RESET CONVO
+// ===========================
+function resetConvo() {
+  conversationHistory = [];
+  document.getElementById('convoMessages').innerHTML = '';
+  const name = getAgentName();
+  const biz = getBusinessName();
+  const industry = document.getElementById('vIndustry').value;
+  const greetings = {
+    plumbing: `Hi there! Thanks for calling ${biz}. I'm ${name}. Are you calling about a plumbing issue, or would you like to schedule a service appointment?`,
+    salon: `Hi! Welcome to ${biz}! I'm ${name}. Would you like to book an appointment today?`,
+    default: `Hi there! Thanks for calling ${biz}. I'm ${name}, your virtual assistant. How can I help you today?`
+  };
+  const greeting = greetings[industry] || greetings.default;
+  conversationHistory.push({ role: 'assistant', content: greeting });
+  addMessage('agent', greeting);
+}
+
+// ===========================
+// INIT
+// ===========================
+renderVServices();
+renderFAQs();
+resetConvo();
+</script>

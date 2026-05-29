@@ -1,0 +1,93 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="nav-logo" style="display:inline-flex">
+          <div class="nav-logo-mark">🌱</div>
+          Bloom<span style="color:var(--bloom-accent)">Up</span>
+        </a>
+        <p>Professional websites and AI voice agents for local businesses. Get found online, never miss a call.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul class="footer-links">
+          <li><a href="/builder">Website Builder</a></li>
+          <li><a href="/voice-agent">AI Voice Agent</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#contact">Get a Demo</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="/about">About</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/admin">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul class="footer-links">
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/accessibility">Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© <%= new Date().getFullYear() %> BloomUp Digital Inc. All rights reserved. Durham Region, Ontario, Canada.</p>
+      <p class="footer-made">Built with <span>♥</span> for local businesses</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Global JS -->
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  navToggle?.addEventListener('click', () => {
+    document.body.classList.toggle('nav-open');
+  });
+
+  // Toast system
+  window.showToast = (message, type = 'info', duration = 4000) => {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `<span>${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}</span> ${message}`;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = 'toastIn 0.3s ease reverse';
+      setTimeout(() => toast.remove(), 300);
+    }, duration);
+  };
+
+  // Flash messages as toasts
+  <% if (typeof flash !== 'undefined' && flash) { %>
+    <% if (flash.success) { %> window.showToast('<%= flash.success %>', 'success'); <% } %>
+    <% if (flash.error) { %> window.showToast('<%= flash.error %>', 'error'); <% } %>
+    <% if (flash.info) { %> window.showToast('<%= flash.info %>', 'info'); <% } %>
+  <% } %>
+
+  // Animate on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+</script>
+
+<% if (typeof extraJs !== 'undefined') { %><script src="<%= extraJs %>"></script><% } %>
+</body>
+</html>

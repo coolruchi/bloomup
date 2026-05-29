@@ -1,0 +1,96 @@
+<%- include('../partials/header', { title: 'Admin Dashboard' }) %>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border-subtle);margin-bottom:0.5rem">
+      <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted)">BloomUp Admin</div>
+    </div>
+    <a href="/admin" class="admin-nav-item active"><span class="admin-nav-icon">📊</span> Overview</a>
+    <a href="/admin/leads" class="admin-nav-item"><span class="admin-nav-icon">📋</span> Leads</a>
+    <a href="/admin/demos" class="admin-nav-item"><span class="admin-nav-icon">🌐</span> Website Demos</a>
+    <a href="/admin/voice-configs" class="admin-nav-item"><span class="admin-nav-icon">🎙</span> Voice Agents</a>
+    <a href="/admin/users" class="admin-nav-item"><span class="admin-nav-icon">👥</span> Users</a>
+    <a href="/admin/calls" class="admin-nav-item"><span class="admin-nav-icon">📞</span> Demo Calls</a>
+    <div style="padding:1rem 1.5rem;margin-top:auto;border-top:1px solid var(--border-subtle)">
+      <a href="/" class="admin-nav-item" style="padding:0.5rem 0"><span class="admin-nav-icon">🌱</span> Back to Site</a>
+      <a href="/auth/logout" class="admin-nav-item" style="padding:0.5rem 0;color:var(--bloom-danger)"><span class="admin-nav-icon">→</span> Sign Out</a>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+    <div class="admin-page-title">Good <%= new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening' %>, <%= user.name || 'Admin' %> 👋</div>
+    <div class="admin-page-sub">Here's what's happening at BloomUp today</div>
+
+    <div class="admin-stats">
+      <div class="admin-stat">
+        <div class="admin-stat-label">Total Leads</div>
+        <div class="admin-stat-num"><%= stats.totalLeads || 0 %></div>
+        <div class="admin-stat-change change-up">↑ All time</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-label">Website Demos</div>
+        <div class="admin-stat-num"><%= stats.totalDemos || 0 %></div>
+        <div class="admin-stat-change change-up">↑ Built</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-label">Voice Configs</div>
+        <div class="admin-stat-num"><%= stats.totalVoiceConfigs || 0 %></div>
+        <div class="admin-stat-change change-up">↑ Created</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-label">Demo Calls</div>
+        <div class="admin-stat-num"><%= stats.totalCalls || 0 %></div>
+        <div class="admin-stat-change">Requested</div>
+      </div>
+    </div>
+
+    <!-- Recent Leads -->
+    <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);margin-bottom:1.5rem">
+      <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center">
+        <h3 style="font-size:1rem">Recent Leads</h3>
+        <a href="/admin/leads" class="btn btn-ghost btn-sm">View All →</a>
+      </div>
+      <div class="data-table-wrap" style="border:none;border-radius:0">
+        <table class="data-table">
+          <thead>
+            <tr><th>Name</th><th>Business</th><th>Interest</th><th>Date</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <% if (recentLeads && recentLeads.length > 0) { %>
+              <% recentLeads.forEach(lead => { %>
+              <tr>
+                <td style="color:var(--text-primary);font-weight:500"><%= lead.full_name %></td>
+                <td><%= lead.business_name || '—' %></td>
+                <td><span class="badge <%= lead.interest === 'bundle' ? 'badge-primary' : 'badge-accent' %> status-badge"><%= lead.interest || 'general' %></span></td>
+                <td><%= new Date(lead.created_at).toLocaleDateString() %></td>
+                <td><span class="badge <%= lead.status === 'new' ? 'badge-warning' : 'badge-success' %> status-badge"><%= lead.status %></span></td>
+              </tr>
+              <% }) %>
+            <% } else { %>
+              <tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted)">No leads yet — share your site to start collecting!</td></tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid-3" style="gap:1rem">
+      <a href="/builder" class="card" style="text-decoration:none;display:block;padding:1.5rem">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem">🎨</div>
+        <div style="font-weight:600;font-size:0.9rem">Open Builder</div>
+        <div style="font-size:0.8rem;color:var(--text-muted)">Test website builder</div>
+      </a>
+      <a href="/voice-agent" class="card" style="text-decoration:none;display:block;padding:1.5rem">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem">🎙</div>
+        <div style="font-weight:600;font-size:0.9rem">Voice Agent Demo</div>
+        <div style="font-size:0.8rem;color:var(--text-muted)">Test the AI chat</div>
+      </a>
+      <a href="/admin/leads" class="card" style="text-decoration:none;display:block;padding:1.5rem">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem">📋</div>
+        <div style="font-weight:600;font-size:0.9rem">Manage Leads</div>
+        <div style="font-size:0.8rem;color:var(--text-muted)">View & update status</div>
+      </a>
+    </div>
+  </main>
+</div>
+<%- include('../partials/footer') %>

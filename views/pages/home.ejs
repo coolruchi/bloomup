@@ -1,0 +1,416 @@
+<%- include('../partials/header', { title: 'Digital Growth for Local Businesses', metaDesc: 'BloomUp helps local businesses get a professional website and AI voice agent — fast, affordable, and done for you.' }) %>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="container">
+    <div class="hero-content" style="max-width:680px">
+      <div class="hero-eyebrow animate-fade-up">
+        <span>✦</span> Durham Region's Digital Growth Platform
+      </div>
+      <h1 class="display-1 hero-title animate-fade-up-delay-1">
+        Your Business,<br><span class="text-gradient">Found & Booked</span><br>24/7 Automatically
+      </h1>
+      <p class="hero-desc animate-fade-up-delay-2">
+        Stop losing customers to competitors who show up on Google. BloomUp gives you a stunning website <em>and</em> an AI that answers your phone when you can't — starting this week.
+      </p>
+      <div class="hero-actions animate-fade-up-delay-3">
+        <a href="/builder" class="btn btn-primary btn-xl">
+          🎨 Build My Website Free
+        </a>
+        <a href="/voice-agent" class="btn btn-glass btn-xl">
+          🎙 Try AI Voice Demo
+        </a>
+      </div>
+      <div class="hero-stats animate-fade-up-delay-3">
+        <div>
+          <div class="hero-stat-num" data-count="300">300+</div>
+          <div class="hero-stat-label">Businesses Launched</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">62%</div>
+          <div class="hero-stat-label">Calls Missed by SMBs</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">< 7</div>
+          <div class="hero-stat-label">Days to Go Live</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating UI preview -->
+  <div style="position:absolute;right:4%;top:50%;transform:translateY(-50%);width:42%;max-width:520px;display:none" class="hero-preview-ui" id="heroPreview">
+    <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-xl)">
+      <div style="background:var(--bg-elevated);padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border-subtle)">
+        <div style="width:12px;height:12px;border-radius:50%;background:#ff5f57"></div>
+        <div style="width:12px;height:12px;border-radius:50%;background:#febc2e"></div>
+        <div style="width:12px;height:12px;border-radius:50%;background:#28c840"></div>
+        <div style="flex:1;background:var(--bg-input);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--text-muted);margin-left:8px">bloomup.ca/demo/your-business</div>
+      </div>
+      <img src="https://images.unsplash.com/photo-1560472355-536de3962603?w=520&q=80&auto=format&fit=crop" alt="Business website preview" style="width:100%;display:block;opacity:0.9" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS BAR ============ -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">45%</div>
+        <div class="stat-label">of SMBs have no working website</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">70%</div>
+        <div class="stat-label">of callers don't leave voicemail</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">$0</div>
+        <div class="stat-label">to build your demo site today</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">AI answers every call</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PRODUCTS ============ -->
+<section class="section" id="products">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">What We Do</div>
+      <h2 class="section-title">Two products. <span class="text-gradient">One powerful system.</span></h2>
+      <p class="section-desc">Your website gets people to call you. Your AI agent makes sure every single call gets answered and booked — even at midnight.</p>
+    </div>
+
+    <div class="grid-2" style="gap:2rem;align-items:start">
+
+      <!-- Website Builder Card -->
+      <div class="product-card web" style="background:var(--bg-card)">
+        <div class="product-card-inner">
+          <div class="product-icon web">🌐</div>
+          <div class="badge badge-primary mb-md">Website Builder</div>
+          <h3>Your Business Website, Live in Days</h3>
+          <p>Pick a template, add your brand — we handle everything else. Mobile-ready, SEO-optimized, and designed to convert visitors into calls.</p>
+          <ul class="product-features">
+            <li>10 industry-specific templates</li>
+            <li>Customize with zero design skills</li>
+            <li>SEO & Google Business setup included</li>
+            <li>Mobile responsive, lightning fast</li>
+            <li>Contact forms & click-to-call</li>
+          </ul>
+          <a href="/builder" class="btn btn-primary w-full">Build My Website →</a>
+        </div>
+        <div style="border-top:1px solid var(--border-subtle);overflow:hidden">
+          <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&q=75&auto=format&fit=crop" alt="Website templates" style="width:100%;height:200px;object-fit:cover;opacity:0.6;display:block" loading="lazy">
+        </div>
+      </div>
+
+      <!-- Voice Agent Card -->
+      <div class="product-card voice" style="background:var(--bg-card)">
+        <div class="product-card-inner">
+          <div class="product-icon voice">🎙</div>
+          <div class="badge badge-accent mb-md">AI Voice Agent</div>
+          <h3>Never Miss a Call. Ever Again.</h3>
+          <p>Your AI receptionist answers 24/7, qualifies leads, books appointments, and sends you a summary — all before you pick up the phone.</p>
+          <ul class="product-features">
+            <li>Answers calls in under 2 seconds</li>
+            <li>Books appointments automatically</li>
+            <li>Qualifies leads before handoff</li>
+            <li>Works nights, weekends, holidays</li>
+            <li>Sounds completely natural</li>
+          </ul>
+          <a href="/voice-agent" class="btn btn-accent w-full" style="color:#0a0a0f">Try Voice Demo →</a>
+        </div>
+        <div style="border-top:1px solid var(--border-subtle);overflow:hidden">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&q=75&auto=format&fit=crop" alt="AI voice agent" style="width:100%;height:200px;object-fit:cover;opacity:0.6;display:block" loading="lazy">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section" style="background:var(--bg-elevated)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">How It Works</div>
+      <h2 class="section-title">From zero to <span class="text-gradient">live in 3 steps</span></h2>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Pick Your Template</h3>
+        <p>Choose from 10 industry-specific designs built for trades, services, restaurants, and more. Each one is proven to convert visitors.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Add Your Brand</h3>
+        <p>Type in your business name, services, phone number, and colors. Watch your site update live — no technical skills needed.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Go Live & Get Calls</h3>
+        <p>We launch your site and activate your AI agent. Your phone starts ringing. You focus on the work — AI handles the rest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INDUSTRIES ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Built For Your Industry</div>
+      <h2 class="section-title">Templates ready for <span class="text-gradient">your business</span></h2>
+    </div>
+    <div class="grid-4" style="gap:1rem">
+      <% const industries = [
+        {icon:'🔧',name:'Plumbing & HVAC',  key:'trades',      img:'photo-1558618666-fcd25c85cd64'},
+        {icon:'⚡',name:'Electrician',       key:'electrical',  img:'photo-1621905251189-08b45d6a269e'},
+        {icon:'🏠',name:'Roofing',           key:'trades',      img:'photo-1635048424329-a9bfb146d7aa'},
+        {icon:'✂️',name:'Hair Salon',        key:'salon',       img:'photo-1522337360788-8b13dee7a37e'},
+        {icon:'🌿',name:'Landscaping',       key:'landscaping', img:'photo-1416879595882-3373a0480b5b'},
+        {icon:'🍕',name:'Restaurant',        key:'restaurant',  img:'photo-1555396273-367ea4eb4db5'},
+        {icon:'🚗',name:'Auto Repair',       key:'auto',        img:'photo-1486006920555-c77dcf18193c'},
+        {icon:'🧹',name:'Cleaning',          key:'cleaning',    img:'photo-1581578731548-c64695cc6952'}
+      ] %>
+      <% industries.forEach(ind => { %>
+      <a href="/builder?industry=<%= ind.key %>" class="card" style="text-decoration:none;display:block">
+        <div style="height:120px;overflow:hidden;position:relative">
+          <img src="https://images.unsplash.com/<%= ind.img %>?w=300&h=120&q=70&auto=format&fit=crop" alt="<%= ind.name %>" style="width:100%;height:100%;object-fit:cover;opacity:0.7" loading="lazy">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6),transparent)"></div>
+        </div>
+        <div class="card-body" style="padding:1rem">
+          <div style="display:flex;align-items:center;gap:0.5rem">
+            <span style="font-size:1.2rem"><%= ind.icon %></span>
+            <span style="font-size:0.85rem;font-weight:600;color:var(--text-secondary)"><%= ind.name %></span>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BUNDLE PROMO ============ -->
+<section class="section" style="background:var(--bg-elevated)">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(6,214,160,0.08));border:1px solid rgba(124,58,237,0.25);border-radius:28px;padding:4rem;text-align:center;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(124,58,237,0.12),transparent);border-radius:50%"></div>
+      <div class="badge badge-accent mb-lg" style="margin:0 auto 1.5rem">🔥 Most Popular Choice</div>
+      <h2 class="display-2 mb-md">Website + AI Agent Bundle</h2>
+      <p style="font-size:1.1rem;color:var(--text-secondary);max-width:520px;margin:0 auto 2rem">
+        Get both working together — your site generates calls, your AI books them. Starting at <strong style="color:var(--text-primary)">$2,999 CAD</strong> setup + <strong style="color:var(--text-primary)">$599/month</strong>.
+      </p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="/builder" class="btn btn-primary btn-xl">Start With Website</a>
+        <a href="/#contact" class="btn btn-glass btn-xl">Talk to Us First</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Pricing</div>
+      <h2 class="section-title">Straightforward. <span class="text-gradient">No surprises.</span></h2>
+      <p class="section-desc">All prices in CAD. Setup fee once, then a simple monthly retainer.</p>
+    </div>
+
+    <div class="grid-3" style="gap:1.5rem;align-items:start">
+      <!-- Website -->
+      <div class="pricing-card">
+        <div class="badge badge-primary mb-md">🌐 Website</div>
+        <h3>Starter Presence</h3>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin:0.5rem 0 1rem">5-page professional site</p>
+        <div class="pricing-price">$1,500</div>
+        <div class="pricing-period">one-time setup</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 5 pages, mobile responsive</li>
+          <li><span class="check">✓</span> Google Business setup</li>
+          <li><span class="check">✓</span> Basic on-page SEO</li>
+          <li><span class="check">✓</span> Contact form + click-to-call</li>
+          <li><span class="check">✓</span> 30 days support</li>
+          <li><span class="check" style="color:var(--text-muted)">+</span> <span style="color:var(--text-muted)">$99/month maintenance</span></li>
+        </ul>
+        <a href="/builder" class="btn btn-ghost w-full">Start Building Free</a>
+      </div>
+
+      <!-- Bundle - Featured -->
+      <div class="pricing-card featured">
+        <div class="pricing-badge"><span class="badge badge-accent">Best Value</span></div>
+        <div class="badge badge-primary mb-md">🚀 Bundle</div>
+        <h3>Professional Growth</h3>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin:0.5rem 0 1rem">Website + AI Voice Agent</p>
+        <div class="pricing-price text-gradient">$2,999</div>
+        <div class="pricing-period">one-time setup + $599/month</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 8-10 page website</li>
+          <li><span class="check">✓</span> AI answers calls 24/7</li>
+          <li><span class="check">✓</span> Calendar booking automation</li>
+          <li><span class="check">✓</span> Lead qualification + follow-up</li>
+          <li><span class="check">✓</span> Monthly performance report</li>
+          <li><span class="check">✓</span> 3 months free maintenance</li>
+        </ul>
+        <a href="/#contact" class="btn btn-primary w-full">Get This Bundle</a>
+      </div>
+
+      <!-- Voice Only -->
+      <div class="pricing-card">
+        <div class="badge badge-accent mb-md">🎙 Voice Agent</div>
+        <h3>AI Receptionist</h3>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin:0.5rem 0 1rem">Standalone voice agent</p>
+        <div class="pricing-price">$500</div>
+        <div class="pricing-period">one-time setup + $299/month</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 24/7 call answering</li>
+          <li><span class="check">✓</span> FAQ answering</li>
+          <li><span class="check">✓</span> Lead capture & summary</li>
+          <li><span class="check">✓</span> 500 min/month included</li>
+          <li><span class="check">✓</span> Human handoff when needed</li>
+          <li><span class="check" style="color:var(--text-muted)">+</span> <span style="color:var(--text-muted)">Upgrade anytime</span></li>
+        </ul>
+        <a href="/voice-agent" class="btn btn-ghost w-full">Try Demo First</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="section" style="background:var(--bg-elevated)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Real Results</div>
+      <h2 class="section-title">Local businesses <span class="text-gradient">growing with BloomUp</span></h2>
+    </div>
+    <div class="grid-3">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"I was losing jobs to competitors who showed up on Google. BloomUp had my site live in 5 days. I booked 3 extra jobs in the first week alone."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">MR</div>
+          <div>
+            <div class="testimonial-name">Mike R.</div>
+            <div class="testimonial-role">Plumber, Oshawa ON</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"The AI voice agent paid for itself in the first month. It answered a call at 11pm on a Saturday and booked a roofing inspection. That was a $4,200 job."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SL</div>
+          <div>
+            <div class="testimonial-name">Sandra L.</div>
+            <div class="testimonial-role">Roofing Contractor, Whitby ON</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"As a salon owner I'm always with clients. The AI books my appointments and answers questions about pricing. My no-show rate dropped 40% from the reminders."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">TK</div>
+          <div>
+            <div class="testimonial-name">Tracy K.</div>
+            <div class="testimonial-role">Salon Owner, Ajax ON</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT / CTA ============ -->
+<section class="section" id="contact">
+  <div class="container-narrow">
+    <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:28px;padding:3rem;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad-primary)"></div>
+      <div class="section-header" style="margin-bottom:2rem">
+        <div class="section-eyebrow">Get Started</div>
+        <h2 class="section-title" style="font-size:1.8rem">Let's talk about <span class="text-gradient">your business</span></h2>
+        <p class="section-desc">Free 15-minute consultation. We'll show you exactly what your business needs — no pressure.</p>
+      </div>
+
+      <% if (locals.contactSuccess) { %>
+        <div class="alert alert-success">✓ Message received! We'll be in touch within 24 hours.</div>
+      <% } %>
+
+      <form action="/leads" method="POST" id="contactForm">
+        <div class="grid-2" style="gap:1rem">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" name="full_name" class="form-input" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Name</label>
+            <input type="text" name="business_name" class="form-input" placeholder="Your business">
+          </div>
+        </div>
+        <div class="grid-2" style="gap:1rem">
+          <div class="form-group">
+            <label class="form-label">Email *</label>
+            <input type="email" name="email" class="form-input" placeholder="you@business.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input type="tel" name="phone" class="form-input" placeholder="(905) 000-0000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">I'm interested in</label>
+          <select name="interest" class="form-select">
+            <option value="website">Website only</option>
+            <option value="voice">AI Voice Agent only</option>
+            <option value="bundle" selected>Website + AI Bundle (Best Value)</option>
+            <option value="consultation">Just want a free consultation</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tell us about your business</label>
+          <textarea name="message" class="form-textarea" placeholder="What kind of business do you run? What's your biggest challenge right now?" rows="3"></textarea>
+        </div>
+        <input type="hidden" name="source" value="homepage_contact">
+        <button type="submit" class="btn btn-primary btn-lg w-full">Send Message — It's Free →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
+
+<script>
+  // Animate stats on scroll
+  const statNums = document.querySelectorAll('[data-count]');
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const target = parseInt(e.target.dataset.count);
+        let current = 0;
+        const step = target / 60;
+        const timer = setInterval(() => {
+          current = Math.min(current + step, target);
+          e.target.textContent = Math.floor(current) + '+';
+          if (current >= target) clearInterval(timer);
+        }, 16);
+        countObserver.unobserve(e.target);
+      }
+    });
+  });
+  statNums.forEach(el => countObserver.observe(el));
+
+  // Show hero preview on large screens
+  if (window.innerWidth > 1100) {
+    document.getElementById('heroPreview').style.display = 'block';
+  }
+</script>

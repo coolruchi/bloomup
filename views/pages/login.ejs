@@ -1,0 +1,33 @@
+<%- include('../partials/header', { title: 'Sign In' }) %>
+<div class="auth-layout">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <a href="/" class="nav-logo" style="display:inline-flex;justify-content:center">
+        <div class="nav-logo-mark">🌱</div> Bloom<span style="color:var(--bloom-accent)">Up</span>
+      </a>
+    </div>
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-sub">Sign in to access your saved demos and configurations</p>
+
+    <% if (locals.error) { %><div class="alert alert-error"><%= error %></div><% } %>
+
+    <form action="/auth/login" method="POST">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-input" placeholder="Your password" required autocomplete="current-password">
+      </div>
+      <input type="hidden" name="redirect" value="<%= locals.redirect || '' %>">
+      <button type="submit" class="btn btn-primary w-full btn-lg">Sign In →</button>
+    </form>
+
+    <div class="auth-divider">or</div>
+    <p style="text-align:center;font-size:0.88rem;color:var(--text-muted)">
+      Don't have an account? <a href="/auth/register">Create one free →</a>
+    </p>
+  </div>
+</div>
+<%- include('../partials/footer') %>

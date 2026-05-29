@@ -1,0 +1,731 @@
+<%- include('../partials/header', { title: 'Website Builder', bodyClass: 'no-footer-padding', extraJs: '/js/builder.js' }) %>
+
+<div class="builder-layout">
+
+  <!-- ===== LEFT PANEL: CONTROLS ===== -->
+  <div class="builder-panel">
+    <div class="builder-panel-header">
+      <h2>🎨 Build Your Website</h2>
+      <p>Customize below — preview updates live on the right</p>
+    </div>
+    <div class="builder-panel-body">
+
+      <!-- STEP 1: Template -->
+      <div class="builder-section">
+        <div class="builder-section-header open" onclick="toggleSection(this)">
+          <span>📐 Step 1 — Choose Template</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="builder-section-body open">
+          <div class="template-grid" id="templateGrid">
+            <% const templates = [
+              {id:'trades',label:'Trades Pro',img:'photo-1558618666-fcd25c85cd64'},
+              {id:'salon',label:'Salon & Spa',img:'photo-1522337360788-8b13dee7a37e'},
+              {id:'restaurant',label:'Restaurant',img:'photo-1555396273-367ea4eb4db5'},
+              {id:'landscaping',label:'Landscaping',img:'photo-1416879595882-3373a0480b5b'},
+              {id:'auto',label:'Auto Repair',img:'photo-1486006920555-c77dcf18193c'},
+              {id:'cleaning',label:'Cleaning',img:'photo-1581578731548-c64695cc6952'},
+              {id:'gym',label:'Fitness & Gym',img:'photo-1534438327276-14e5300c3a48'},
+              {id:'medical',label:'Health & Medical',img:'photo-1576091160399-112ba8d25d1d'},
+              {id:'legal',label:'Professional',img:'photo-1507003211169-0a1dd7228f2d'},
+              {id:'retail',label:'Retail & Shop',img:'photo-1441986300917-64674bd600d8'}
+            ] %>
+            <% templates.forEach((t, i) => { %>
+            <div class="template-thumb <%= i === 0 ? 'selected' : '' %>" data-template="<%= t.id %>" onclick="selectTemplate('<%= t.id %>', this)">
+              <img src="https://images.unsplash.com/<%= t.img %>?w=200&h=150&q=60&auto=format&fit=crop" alt="<%= t.label %>">
+              <div class="template-thumb-label"><%= t.label %></div>
+            </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Brand -->
+      <div class="builder-section">
+        <div class="builder-section-header open" onclick="toggleSection(this)">
+          <span>🏷 Step 2 — Your Brand</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="builder-section-body open">
+          <div class="form-group">
+            <label class="form-label">Business Name *</label>
+            <input type="text" id="brandName" class="form-input" placeholder="e.g. Mike's Plumbing" oninput="updatePreview()" value="Your Business Name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tagline</label>
+            <input type="text" id="tagline" class="form-input" placeholder="e.g. Fast, Reliable, Local" oninput="updatePreview()" value="Fast, Reliable, Professional">
+          </div>
+          <div class="grid-2" style="gap:0.75rem">
+            <div class="form-group">
+              <label class="form-label">Primary Color</label>
+              <input type="color" id="primaryColor" value="#7c3aed" onchange="updatePreview()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Accent Color</label>
+              <input type="color" id="accentColor" value="#06d6a0" onchange="updatePreview()">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Services -->
+      <div class="builder-section">
+        <div class="builder-section-header" onclick="toggleSection(this)">
+          <span>🛠 Step 3 — Services</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="builder-section-body">
+          <div class="services-chips" id="servicesChips"></div>
+          <div style="display:flex;gap:0.5rem">
+            <input type="text" id="serviceInput" class="form-input" placeholder="e.g. Drain Cleaning" style="flex:1" onkeydown="if(event.key==='Enter'){addService();event.preventDefault()}">
+            <button class="btn btn-primary btn-sm" onclick="addService()">Add</button>
+          </div>
+          <p class="form-hint mt-sm">Press Enter or click Add. Up to 8 services.</p>
+        </div>
+      </div>
+
+      <!-- STEP 4: Contact -->
+      <div class="builder-section">
+        <div class="builder-section-header" onclick="toggleSection(this)">
+          <span>📞 Step 4 — Contact Info</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="builder-section-body">
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" id="phone" class="form-input" placeholder="(905) 555-0100" oninput="updatePreview()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" id="email" class="form-input" placeholder="info@yourbusiness.com" oninput="updatePreview()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Address / Service Area</label>
+            <input type="text" id="address" class="form-input" placeholder="Oshawa, ON" oninput="updatePreview()">
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5: About -->
+      <div class="builder-section">
+        <div class="builder-section-header" onclick="toggleSection(this)">
+          <span>📝 Step 5 — About You</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="builder-section-body">
+          <div class="form-group">
+            <label class="form-label">About Your Business</label>
+            <textarea id="aboutText" class="form-textarea" placeholder="Tell customers about your business, experience, and what makes you different..." oninput="updatePreview()" rows="4"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAVE / CONTACT -->
+      <div style="padding:1rem 0;border-top:1px solid var(--border-subtle);margin-top:1rem">
+        <% if (user) { %>
+          <button class="btn btn-primary w-full btn-lg mb-sm" onclick="saveDemo()">💾 Save My Demo Site</button>
+        <% } else { %>
+          <a href="/auth/register?redirect=/builder" class="btn btn-primary w-full btn-lg mb-sm" style="display:flex;justify-content:center">
+            💾 Save My Demo Site
+          </a>
+          <p class="form-hint text-center">Free account required to save</p>
+        <% } %>
+        <a href="/#contact" class="btn btn-ghost w-full mt-sm" style="display:flex;justify-content:center">
+          📩 Get This Built For Me →
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== RIGHT: PREVIEW ===== -->
+  <div class="builder-preview">
+    <div class="preview-toolbar">
+      <div style="font-size:0.82rem;color:var(--text-muted)">
+        <span id="previewTitle">Your Business Name</span> — Live Preview
+      </div>
+      <div class="preview-device-btns">
+        <button class="device-btn active" onclick="setDevice('desktop', this)">🖥 Desktop</button>
+        <button class="device-btn" onclick="setDevice('tablet', this)">📱 Tablet</button>
+        <button class="device-btn" onclick="setDevice('mobile', this)">📱 Mobile</button>
+      </div>
+      <button class="btn btn-accent btn-sm" onclick="openFullPreview()">⛶ Full Screen</button>
+    </div>
+    <div class="preview-frame-wrap" id="previewWrap">
+      <iframe id="preview-iframe" title="Website Preview" sandbox="allow-scripts allow-same-origin"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<!-- Save demo modal -->
+<div id="saveDemoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9000;display:none;align-items:center;justify-content:center;padding:1rem">
+  <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:20px;padding:2rem;max-width:440px;width:100%">
+    <h3 style="margin-bottom:0.5rem">Save your demo site</h3>
+    <p style="font-size:0.87rem;color:var(--text-muted);margin-bottom:1.5rem">Enter your email and we'll send you a link you can share or revisit anytime.</p>
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input type="email" id="saveEmail" class="form-input" placeholder="you@example.com">
+    </div>
+    <div style="display:flex;gap:0.75rem">
+      <button class="btn btn-primary" onclick="confirmSave()" style="flex:1">Save & Get Link</button>
+      <button class="btn btn-ghost" onclick="closeSaveModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// TEMPLATE DATA — unique layout + defaults per industry
+// ============================================================
+const TEMPLATES = {
+
+  trades: {
+    primaryColor: '#1e3a8a', accentColor: '#f59e0b',
+    defaultServices: ['Emergency Plumbing','Drain Cleaning','Water Heater Install','Leak Detection','Pipe Repair','Fixture Install'],
+    defaultTagline: 'Fast Emergency Response — Licensed & Insured',
+    heroImg: 'photo-1558618666-fcd25c85cd64',
+    render(d) {
+      return `<nav style="background:${d.primary};padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between">
+        <div style="color:#fff;font-weight:800;font-size:1.1rem">🔧 ${d.name}</div>
+        <a href="tel:${d.phone}" style="background:${d.accent};color:#1a1a1a;padding:0.4rem 1rem;border-radius:6px;font-weight:700;font-size:0.85rem;text-decoration:none">📞 ${d.phone||'Call Now'}</a>
+      </nav>
+      <div style="background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;padding:3.5rem 2rem;text-align:center">
+        <div style="display:inline-block;background:rgba(245,158,11,0.2);border:1px solid #f59e0b;color:#fcd34d;padding:0.3rem 1rem;border-radius:99px;font-size:0.75rem;font-weight:700;margin-bottom:1rem">⚡ 24/7 EMERGENCY SERVICE AVAILABLE</div>
+        <h1 style="font-size:2.2rem;font-weight:900;line-height:1.15;margin-bottom:0.75rem">${d.tagline}</h1>
+        <p style="color:#93c5fd;margin-bottom:2rem;font-size:0.95rem">Serving ${d.address||'Durham Region'} · Response in 60 min or less</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+          <a href="tel:${d.phone}" style="background:${d.accent};color:#1a1a1a;padding:0.8rem 1.75rem;border-radius:8px;font-weight:800;font-size:0.95rem;text-decoration:none">📞 Emergency Call</a>
+          <a href="#services" style="border:2px solid rgba(255,255,255,0.3);color:#fff;padding:0.8rem 1.75rem;border-radius:8px;font-weight:700;font-size:0.95rem;text-decoration:none">View Services</a>
+        </div>
+      </div>
+      <div style="background:#f8fafc;padding:1rem 2rem;display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;border-bottom:1px solid #e2e8f0">
+        ${['✓ Licensed & Insured','✓ Upfront Pricing','✓ Satisfaction Guaranteed','✓ Background Checked'].map(b=>`<span style="font-size:0.82rem;font-weight:600;color:#1e3a8a">${b}</span>`).join('')}
+      </div>
+      <div style="padding:3rem 2rem" id="services">
+        <h2 style="font-size:1.4rem;font-weight:800;text-align:center;margin-bottom:2rem">Our Services</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem">
+          ${d.services.map(s=>`<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem;text-align:center;border-top:3px solid ${d.primary}"><div style="font-size:1.5rem;margin-bottom:0.5rem">🔧</div><div style="font-weight:600;font-size:0.85rem">${s}</div></div>`).join('')}
+        </div>
+      </div>
+      <div style="background:#1e3a8a;color:#fff;padding:2.5rem;text-align:center">
+        <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:0.5rem">Need a Plumber Right Now?</h2>
+        <p style="color:#93c5fd;margin-bottom:1.25rem;font-size:0.88rem">Free estimates · No service call fee · We answer every call</p>
+        <a href="tel:${d.phone}" style="background:${d.accent};color:#1a1a1a;padding:0.8rem 2rem;border-radius:8px;font-weight:800;text-decoration:none">📞 ${d.phone||'Call Now'}</a>
+      </div>
+      <footer style="background:#0f172a;color:#64748b;text-align:center;padding:1rem;font-size:0.78rem">© ${new Date().getFullYear()} ${d.name} · ${d.address||'Durham Region'}</footer>`;
+    }
+  },
+
+  salon: {
+    primaryColor: '#be185d', accentColor: '#f9a8d4',
+    defaultServices: ['Haircuts & Styling','Colour & Highlights','Blowouts','Keratin Treatment','Manicure & Pedicure','Waxing'],
+    defaultTagline: 'Where Beauty Meets Expertise',
+    heroImg: 'photo-1522337360788-8b13dee7a37e',
+    render(d) {
+      return `<nav style="background:#fff;padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #fce7f3">
+        <div style="color:${d.primary};font-weight:800;font-size:1.15rem;font-style:italic">✦ ${d.name}</div>
+        <div style="display:flex;gap:1rem;align-items:center">
+          <span style="font-size:0.82rem;color:#9ca3af">${d.phone||''}</span>
+          <a href="#book" style="background:${d.primary};color:#fff;padding:0.4rem 1.1rem;border-radius:99px;font-size:0.82rem;font-weight:600;text-decoration:none">Book Now</a>
+        </div>
+      </nav>
+      <div style="display:grid;grid-template-columns:1fr 1fr;min-height:400px">
+        <div style="background:linear-gradient(135deg,#fdf2f8,#fce7f3);padding:3rem 2.5rem;display:flex;flex-direction:column;justify-content:center">
+          <div style="color:${d.primary};font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">Durham Region's Premier Salon</div>
+          <h1 style="font-size:2.1rem;font-weight:900;color:#1a1a1a;line-height:1.2;margin-bottom:0.75rem;font-style:italic">${d.tagline}</h1>
+          <p style="color:#6b7280;font-size:0.87rem;margin-bottom:1.5rem;line-height:1.65">${d.about||'Experience the art of beauty in a relaxing environment. Our expert stylists are dedicated to making you look and feel amazing.'}</p>
+          <a href="#book" style="background:${d.primary};color:#fff;padding:0.75rem 1.5rem;border-radius:99px;font-weight:700;font-size:0.88rem;text-decoration:none;display:inline-block;width:fit-content">Book Appointment →</a>
+        </div>
+        <div style="overflow:hidden"><img src="https://images.unsplash.com/${d.heroImg}?w=600&h=420&q=80&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover" alt="Salon"></div>
+      </div>
+      <div style="background:#fff;padding:2.5rem 2rem">
+        <h2 style="font-size:1.3rem;font-weight:800;text-align:center;margin-bottom:2rem;color:#1a1a1a">Our Services</h2>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:680px;margin:0 auto">
+          ${d.services.map(s=>`<div style="text-align:center;padding:1.25rem 0.75rem;border:1px solid #fce7f3;border-radius:12px;background:#fdf2f8"><div style="font-size:1.4rem;margin-bottom:0.4rem">💅</div><div style="font-size:0.82rem;font-weight:600;color:#1a1a1a">${s}</div></div>`).join('')}
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,${d.primary},#9d174d);color:#fff;padding:2.5rem;text-align:center" id="book">
+        <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:0.5rem">Ready for Your Transformation?</h2>
+        <p style="color:#fce7f3;margin-bottom:1.25rem;font-size:0.88rem">Call us or book online · ${d.address||'Durham Region'}</p>
+        <a href="tel:${d.phone}" style="background:#fff;color:${d.primary};padding:0.8rem 2rem;border-radius:99px;font-weight:800;text-decoration:none">📞 Book Now</a>
+      </div>
+      <footer style="background:#1a1a1a;color:#6b7280;text-align:center;padding:1rem;font-size:0.78rem">© ${new Date().getFullYear()} ${d.name} · ${d.email||''}</footer>`;
+    }
+  },
+
+  restaurant: {
+    primaryColor: '#92400e', accentColor: '#fbbf24',
+    defaultServices: ['Dine-In','Takeout & Delivery','Catering','Private Events','Daily Specials','Family Meals'],
+    defaultTagline: 'Fresh. Local. Unforgettable.',
+    heroImg: 'photo-1555396273-367ea4eb4db5',
+    render(d) {
+      return `<nav style="position:absolute;top:0;left:0;right:0;z-index:10;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between">
+        <div style="color:#fff;font-weight:900;font-size:1.3rem;text-shadow:0 1px 4px rgba(0,0,0,0.5)">${d.name}</div>
+        <div style="display:flex;gap:1.5rem">
+          ${['Menu','About','Reserve'].map(l=>`<a href="#" style="color:rgba(255,255,255,0.9);font-size:0.87rem;font-weight:600;text-decoration:none">${l}</a>`).join('')}
+        </div>
+      </nav>
+      <div style="position:relative;height:460px;overflow:hidden">
+        <img src="https://images.unsplash.com/${d.heroImg}?w=1200&h=460&q=85&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover">
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.3),rgba(0,0,0,0.65))"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:2rem">
+          <div style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:${d.accent};font-weight:700;margin-bottom:0.75rem">${d.address||'Durham Region'}</div>
+          <h1 style="font-size:2.6rem;font-weight:900;line-height:1.1;margin-bottom:1rem">${d.tagline}</h1>
+          <p style="font-size:0.95rem;opacity:0.9;margin-bottom:1.75rem;max-width:460px">${d.about||'Locally sourced ingredients, made with love. Come taste the difference.'}</p>
+          <div style="display:flex;gap:1rem">
+            <a href="tel:${d.phone}" style="background:${d.accent};color:#1a1a1a;padding:0.8rem 1.75rem;border-radius:8px;font-weight:800;text-decoration:none">Reserve a Table</a>
+            <a href="#menu" style="border:2px solid rgba(255,255,255,0.5);color:#fff;padding:0.8rem 1.75rem;border-radius:8px;font-weight:700;text-decoration:none">View Menu</a>
+          </div>
+        </div>
+      </div>
+      <div style="background:#fffbf0;padding:1.5rem 2rem;display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;border-bottom:2px solid #fef3c7">
+        ${[`📍 ${d.address||'Durham Region'}`,`📞 ${d.phone||'Call us'}`,`⏰ Open Daily 11am–10pm`].map(i=>`<span style="font-size:0.85rem;font-weight:600;color:#92400e">${i}</span>`).join('')}
+      </div>
+      <div style="padding:2.5rem 2rem;background:#fff" id="menu">
+        <h2 style="font-size:1.3rem;font-weight:800;text-align:center;margin-bottom:2rem">What We Offer</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;max-width:680px;margin:0 auto">
+          ${d.services.map(s=>`<div style="background:#fffbf0;border:1px solid #fef3c7;border-radius:10px;padding:1rem;text-align:center"><div style="font-size:1.4rem;margin-bottom:0.4rem">🍽</div><div style="font-size:0.82rem;font-weight:600">${s}</div></div>`).join('')}
+        </div>
+      </div>
+      <footer style="background:#1c0a00;color:#78350f;text-align:center;padding:1.25rem;font-size:0.78rem">© ${new Date().getFullYear()} ${d.name} · ${d.address||'Durham Region'} · ${d.phone||''}</footer>`;
+    }
+  },
+
+  landscaping: {
+    primaryColor: '#166534', accentColor: '#86efac',
+    defaultServices: ['Lawn Maintenance','Garden Design','Sodding & Seeding','Tree Trimming','Snow Removal','Interlocking'],
+    defaultTagline: 'Transforming Outdoor Spaces Since Day One',
+    heroImg: 'photo-1416879595882-3373a0480b5b',
+    render(d) {
+      return `<nav style="background:${d.primary};padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between">
+        <div style="color:#fff;font-weight:800;font-size:1.05rem">🌿 ${d.name}</div>
+        <div style="display:flex;gap:0.75rem;align-items:center">
+          <span style="color:#86efac;font-size:0.8rem;font-weight:600">${d.phone||''}</span>
+          <a href="tel:${d.phone}" style="background:#86efac;color:#14532d;padding:0.35rem 0.9rem;border-radius:6px;font-weight:700;font-size:0.8rem;text-decoration:none">Free Quote</a>
+        </div>
+      </nav>
+      <div style="position:relative;overflow:hidden;height:400px">
+        <img src="https://images.unsplash.com/${d.heroImg}?w=1200&h=400&q=80&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover">
+        <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(22,101,52,0.85),rgba(22,101,52,0.3) 60%,transparent)"></div>
+        <div style="position:absolute;top:50%;left:2.5rem;transform:translateY(-50%);color:#fff;max-width:440px">
+          <div style="background:rgba(134,239,172,0.2);border:1px solid rgba(134,239,172,0.4);color:#86efac;display:inline-block;padding:0.25rem 0.75rem;border-radius:99px;font-size:0.72rem;font-weight:700;margin-bottom:0.75rem">SERVING ${(d.address||'DURHAM REGION').toUpperCase()}</div>
+          <h1 style="font-size:2.1rem;font-weight:900;line-height:1.2;margin-bottom:0.75rem">${d.tagline}</h1>
+          <p style="color:rgba(255,255,255,0.85);font-size:0.88rem;margin-bottom:1.5rem;line-height:1.6">${d.about||'Professional landscaping for residential and commercial properties.'}</p>
+          <a href="tel:${d.phone}" style="background:#86efac;color:#14532d;padding:0.75rem 1.5rem;border-radius:8px;font-weight:800;text-decoration:none;font-size:0.88rem">Get Free Estimate →</a>
+        </div>
+      </div>
+      <div style="background:#f0fdf4;padding:2.5rem 2rem">
+        <h2 style="font-size:1.3rem;font-weight:800;text-align:center;color:#14532d;margin-bottom:2rem">Our Services</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem">
+          ${d.services.map(s=>`<div style="background:#fff;border:1px solid #bbf7d0;border-radius:10px;padding:1.25rem;border-left:4px solid ${d.primary}"><div style="font-size:1.3rem;margin-bottom:0.4rem">🌱</div><div style="font-weight:700;font-size:0.85rem;color:#14532d">${s}</div></div>`).join('')}
+        </div>
+      </div>
+      <div style="background:${d.primary};color:#fff;padding:2.5rem;text-align:center">
+        <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:0.4rem">Ready to Transform Your Property?</h2>
+        <p style="color:#86efac;margin-bottom:1.25rem;font-size:0.87rem">Free estimates · Licensed & insured · ${d.address||'Durham Region'}</p>
+        <a href="tel:${d.phone}" style="background:#86efac;color:#14532d;padding:0.8rem 1.75rem;border-radius:8px;font-weight:800;text-decoration:none">📞 ${d.phone||'Call for Free Estimate'}</a>
+      </div>
+      <footer style="background:#052e16;color:#166534;text-align:center;padding:1rem;font-size:0.78rem">© ${new Date().getFullYear()} ${d.name} · ${d.address||'Durham Region'}</footer>`;
+    }
+  },
+
+  auto: {
+    primaryColor: '#1f2937', accentColor: '#f97316',
+    defaultServices: ['Oil Changes','Brake Service','Tire Rotation','Engine Diagnostics','Transmission','A/C Service'],
+    defaultTagline: 'Honest Repairs. Fair Prices. Fast Turnaround.',
+    heroImg: 'photo-1486006920555-c77dcf18193c',
+    render(d) {
+      return `<nav style="background:#111827;padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid ${d.accent}">
+        <div style="color:#fff;font-weight:800;font-size:1.05rem">🔩 ${d.name}</div>
+        <div style="display:flex;gap:1rem;align-items:center">
+          ${['Services','About','Contact'].map(l=>`<a href="#" style="color:#9ca3af;font-size:0.82rem;text-decoration:none">${l}</a>`).join('')}
+          <a href="tel:${d.phone}" style="background:${d.accent};color:#fff;padding:0.4rem 1rem;border-radius:6px;font-weight:700;font-size:0.82rem;text-decoration:none">Book Service</a>
+        </div>
+      </nav>
+      <div style="background:linear-gradient(135deg,#111827,#1f2937);color:#fff;padding:3rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center">
+        <div>
+          <div style="color:${d.accent};font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">⭐ Trusted Auto Repair · ${d.address||'Durham Region'}</div>
+          <h1 style="font-size:1.8rem;font-weight:900;line-height:1.2;margin-bottom:0.75rem">${d.tagline}</h1>
+          <p style="color:#9ca3af;font-size:0.87rem;margin-bottom:1.5rem;line-height:1.65">${d.about||'Certified mechanics, transparent pricing, no surprises on your bill.'}</p>
+          <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+            <a href="tel:${d.phone}" style="background:${d.accent};color:#fff;padding:0.7rem 1.4rem;border-radius:7px;font-weight:700;text-decoration:none;font-size:0.87rem">Book Appointment</a>
+            <a href="tel:${d.phone}" style="border:1px solid #374151;color:#9ca3af;padding:0.7rem 1.4rem;border-radius:7px;font-weight:600;text-decoration:none;font-size:0.87rem">${d.phone||'Call Us'}</a>
+          </div>
+        </div>
+        <div style="border-radius:12px;overflow:hidden;height:240px">
+          <img src="https://images.unsplash.com/${d.heroImg}?w=500&h=240&q=80&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;opacity:0.8">
+        </div>
+      </div>
+      <div style="background:#f9fafb;padding:2.5rem 2rem">
+        <h2 style="font-size:1.3rem;font-weight:800;text-align:center;margin-bottom:2rem">Services & Specialties</h2>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;max-width:680px;margin:0 auto">
+          ${d.services.map(s=>`<div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:1rem;display:flex;align-items:center;gap:0.6rem"><span style="color:${d.accent};font-size:1rem">⚙</span><span style="font-size:0.82rem;font-weight:600">${s}</span></div>`).join('')}
+        </div>
+      </div>
+      <div style="background:#111827;color:#fff;padding:2.5rem;text-align:center">
+        <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:0.4rem">Same-Day Appointments Available</h2>
+        <p style="color:#6b7280;font-size:0.85rem;margin-bottom:1.25rem">${d.address||'Durham Region'} · Mon–Sat 8am–6pm</p>
+        <a href="tel:${d.phone}" style="background:${d.accent};color:#fff;padding:0.8rem 2rem;border-radius:8px;font-weight:800;text-decoration:none">📞 ${d.phone||'Book Now'}</a>
+      </div>
+      <footer style="background:#030712;color:#374151;text-align:center;padding:1rem;font-size:0.78rem">© ${new Date().getFullYear()} ${d.name}</footer>`;
+    }
+  },
+
+  cleaning: {
+    primaryColor: '#0369a1', accentColor: '#38bdf8',
+    defaultServices: ['Regular Home Cleaning','Deep Clean','Move-In / Move-Out','Office Cleaning','Post-Construction','Airbnb Turnovers'],
+    defaultTagline: 'Spotless Results, Every Single Visit',
+    heroImg: 'photo-1581578731548-c64695cc6952',
+    render(d) {
+      return `<nav style="background:#fff;border-bottom:1px solid #e0f2fe;padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between">
+        <div style="color:${d.primary};font-weight:800;font-size:1.05rem">✨ ${d.name}</div>
+        <a href="tel:${d.phone}" style="background:${d.primary};color:#fff;padding:0.4rem 1rem;border-radius:99px;font-size:0.82rem;font-weight:600;text-decoration:none">Get Free Quote</a>
+      </nav>
+      <div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);padding:3rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center">
+        <div>
+          <div style="color:${d.primary};font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.75rem">💎 Professional Cleaning · ${d.address||'Durham Region'}</div>
+          <h1 style="font-size:1.9rem;font-weight:900;color:#0c4a6e;line-height:1.2;margin-bottom:0.75rem">${d.tagline}</h1>
+          <p style="color:#0369a1;font-size:0.87rem;line-height:1.65;margin-bottom:1.25rem">${d.about||'Trusted by homeowners and businesses. Insured staff, eco-friendly products, consistent checklists every visit.'}</p>
+          <div style="display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.5rem">
+            ${['Background-checked staff','Eco-friendly products','Same cleaner every time','Satisfaction guarantee'].map(f=>`<div style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:#0369a1"><span style="background:#0369a1;color:#fff;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.6rem;flex-shrink:0">✓</span>${f}</div>`).join('')}
+          </div>
+          <a href="tel:${d.phone}" style="background:${d.primary};color:#fff;padding:0.75rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;font-size:0.87rem">Book a Clean →</a>
+        </div>
+        <div style="border-radius:16px;overflow:hidden;height:280px;box-shadow:0 8px 30px rgba(3,105,161,0.2)">
+          <img src="https://images.unsplash.com/${d.heroImg}?w=500&h=280&q=80&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover">
+        </div>
+      </div>
+      <div style="background:#fff;padding:2.5rem 2rem">
+        <h2 style="text-align:center;font-size:1.3rem;font-weight:800;color:#0c4a6e;margin-bottom:2rem">Cleaning Services</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.85rem">
+          ${d.services.map(s=>`<div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:1rem;display:flex;align-items:center;gap:0.6rem"><span style="font-size:1.1rem">🧹</span><span style="font-size:0.82rem;font-weight:600;color:#0c4a6e">${s}</span></div>`).join('')}
+        </div>
+      </div>
+      <div style="background:${d.primary};color:#fff;padding:2.5rem;text-align:center">
+        <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:0.4rem">Book Your First Clean Today</h2>
+        <p style="color:#bae6fd;font-size:0.85rem;margin-bottom:1.25rem">First-time clients get 15% off · No contracts · Cancel anytime</p>
+        <a href="tel:${d.phone}" style="background:#fff;color:${d.primary};padding:0.8rem 1.75rem;border-radius:8px;font-weight:800;text-decoration:none">📞 ${d.phone||'Get Free Quote'}</a>
+      </div>
+      <footer style="background:#0c4a6e;color:#075985;text-align:center;padding:1rem;font-size:0.78rem">© ${new Date().getFullYear()} ${d.name} · ${d.address||'Durham Region'}</footer>`;
+    }
+  },
+
+  gym: {
+    primaryColor: '#7f1d1d', accentColor: '#f87171',
+    defaultServices: ['Personal Training','Group Classes','Cardio Zone','Free Weights','Nutrition Coaching','Online Programs'],
+    defaultTagline: 'No Excuses. Just Results.',
+    heroImg: 'photo-1534438327276-14e5300c3a48',
+    render(d) {
+      return `<nav style="background:#000;padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1f2937">
+        <div style="color:#fff;font-weight:900;font-size:1.1rem;letter-spacing:0.05em;text-transform:uppercase">💪 ${d.name}</div>
+        <div style="display:flex;gap:0.75rem;align-items:center">
+          <a href="#" style="color:#9ca3af;font-size:0.8rem;text-decoration:none">Classes</a>
+          <a href="#" style="color:#9ca3af;font-size:0.8rem;text-decoration:none">Pricing</a>
+          <a href="tel:${d.phone}" style="background:${d.accent};color:#fff;padding:0.4rem 1rem;border-radius:6px;font-weight:700;font-size:0.8rem;text-decoration:none">Free Trial</a>
+        </div>
+      </nav>
+      <div style="position:relative;height:440px;overflow:hidden">
+        <img src="https://images.unsplash.com/${d.heroImg}?w=1200&h=440&q=80&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover">
+        <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.85),rgba(0,0,0,0.35))"></div>
+        <div style="position:absolute;top:50%;left:2.5rem;transform:translateY(-50%);color:#fff;max-width:480px">
+          <div style="color:${d.accent};font-size:0.72rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.75rem">📍 ${d.address||'Durham Region'}</div>
+          <h1 style="font-size:2.5rem;font-weight:900;line-height:1.1;margin-bottom:0.75rem;text-transform:uppercase">${d.tagline}</h1>
+          <p style="color:#d1d5db;font-size:0.88rem;margin-bottom:1.75rem">${d.about||'State-of-the-art equipment, expert coaches, a community that pushes you forward.'}</p>
+          <div style="display:flex;gap:0.75rem">
+            <a href="tel:${d.phone}" style="background:${d.accent};color:#fff;padding:0.8rem 1.5rem;border-radius:7px;font-weight:800;text-decoration:none;font-size:0.88rem">Start Free Trial</a>
+            <a href="#classes" style="border:1px solid rgba(255,255,255,0.3);color:#fff;padding:0.8rem 1.5rem;border-radius:7px;font-weight:600;text-decoration:none;font-size:0.88rem">View Classes</a>
+          </div>
+        </div>
+      </div>
+      <div style="background:#111;padding:1.25rem 2rem;display:flex;justify-content:center;gap:3rem;flex-wrap:wrap">
+        ${['Open 5am–11pm','Expert Trainers','State-of-art Equipment'].map(f=>`<span style="color:${d.accent};font-size:0.82rem;font-weight:700">✓ ${f}</span>`).join('')}
+      </div>
+      <div style="background:#0a0a0a;padding:2.5rem 2rem" id="classes">
+        <h2 style="color:#fff;font-size:1.3rem;font-weight:900;text-align:center;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2rem">What We Offer</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem">
+          ${d.services.map(s=>`<div style="background:#1a1a1a;border:1px solid #2d2d2d;border-top:2px solid ${d.accent};border-radius:10px;padding:1.25rem;text-align:center"><div style="font-size:1.4rem;margin-bottom:0.4rem">🔥</div><div style="color:#fff;font-weight:700;font-size:0.82rem">${s}</div></div>`).join('')}
+        </div>
+      </div>
+      <footer style="background:#000;color:#374151;text-align:center;padding:1rem;font-size:0.78rem;border-top:1px solid #1f2937">© ${new Date().getFullYear()} ${d.name} · ${d.phone||''}</footer>`;
+    }
+  },
+
+  medical: {
+    primaryColor: '#075985', accentColor: '#0ea5e9',
+    defaultServices: ['General Check-Ups','Preventive Care','Lab Tests','Vaccinations','Mental Health','Telehealth'],
+    defaultTagline: 'Compassionate Care for Every Patient',
+    heroImg: 'photo-1576091160399-112ba8d25d1d',
+    render(d) {
+      return `<nav style="background:#fff;border-bottom:2px solid #e0f2fe;padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <div style="background:${d.primary};color:#fff;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem">🏥</div>
+          <div><div style="color:${d.primary};font-weight:800;font-size:0.95rem">${d.name}</div><div style="color:#0ea5e9;font-size:0.68rem">Primary Care · ${d.address||'Durham Region'}</div></div>
+        </div>
+        <a href="tel:${d.phone}" style="background:${d.primary};color:#fff;padding:0.4rem 1rem;border-radius:6px;font-size:0.8rem;font-weight:600;text-decoration:none">Book Appointment</a>
+      </nav>
+      <div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);padding:3rem 2rem;display:grid;grid-template-columns:1.1fr 1fr;gap:2rem;align-items:center">
+        <div>
+          <div style="background:#0ea5e9;color:#fff;display:inline-block;padding:0.25rem 0.75rem;border-radius:4px;font-size:0.7rem;font-weight:700;margin-bottom:1rem">NEW PATIENTS WELCOME</div>
+          <h1 style="font-size:1.9rem;font-weight:900;color:#0c4a6e;line-height:1.2;margin-bottom:0.75rem">${d.tagline}</h1>
+          <p style="color:#0369a1;font-size:0.87rem;line-height:1.7;margin-bottom:1.25rem">${d.about||'Our experienced team provides evidence-based care in a warm, welcoming environment.'}</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin-bottom:1.5rem">
+            ${['Accepting New Patients','Same-Day Appointments','Evening Hours','Telehealth Options'].map(f=>`<div style="display:flex;align-items:center;gap:0.4rem;font-size:0.78rem;color:#0369a1"><span style="color:#0ea5e9">✓</span>${f}</div>`).join('')}
+          </div>
+          <a href="tel:${d.phone}" style="background:${d.primary};color:#fff;padding:0.75rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;font-size:0.87rem">Book an Appointment</a>
+        </div>
+        <div style="border-radius:16px;overflow:hidden;height:280px;box-shadow:0 8px 30px rgba(7,89,133,0.15)">
+          <img src="https://images.unsplash.com/${d.heroImg}?w=500&h=280&q=80&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover">
+        </div>
+      </div>
+      <div style="background:#fff;padding:2.5rem 2rem">
+        <h2 style="text-align:center;font-size:1.3rem;font-weight:800;color:#0c4a6e;margin-bottom:2rem">Our Services</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem">
+          ${d.services.map(s=>`<div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:1.25rem;text-align:center"><div style="font-size:1.3rem;margin-bottom:0.4rem">⚕</div><div style="font-size:0.82rem;font-weight:600;color:#075985">${s}</div></div>`).join('')}
+        </div>
+      </div>
+      <div style="background:${d.primary};color:#fff;padding:2.5rem;text-align:center">
+        <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:0.4rem">Ready to Book Your Appointment?</h2>
+        <p style="color:#bae6fd;font-size:0.85rem;margin-bottom:1.25rem">Call us or book online · Same-day appointments available</p>
+        <a href="tel:${d.phone}" style="background:#fff;color:${d.primary};padding:0.8rem 1.75rem;border-radius:8px;font-weight:800;text-decoration:none">📞 ${d.phone||'Book Now'}</a>
+      </div>
+      <footer style="background:#0c4a6e;color:#075985;text-align:center;padding:1rem;font-size:0.78rem">© ${new Date().getFullYear()} ${d.name} · ${d.address||'Durham Region'}</footer>`;
+    }
+  },
+
+  electrical: {
+    primaryColor: '#1c1917', accentColor: '#facc15',
+    defaultServices: ['Panel Upgrades','EV Charger Install','Wiring & Rewiring','Safety Inspections','Pot Lights','Generator Install'],
+    defaultTagline: 'Licensed Electricians. Safe. On Time. Guaranteed.',
+    heroImg: 'photo-1621905251189-08b45d6a269e',
+    render(d) {
+      return `<nav style="background:#1c1917;padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid ${d.accent}">
+        <div style="color:#fff;font-weight:800;font-size:1.05rem">⚡ ${d.name}</div>
+        <div style="display:flex;gap:0.75rem;align-items:center">
+          <span style="color:#a8a29e;font-size:0.78rem">${d.phone||''}</span>
+          <a href="tel:${d.phone}" style="background:${d.accent};color:#1c1917;padding:0.35rem 0.9rem;border-radius:6px;font-weight:800;font-size:0.8rem;text-decoration:none">Call Now</a>
+        </div>
+      </nav>
+      <div style="background:linear-gradient(135deg,#1c1917,#292524);color:#fff;padding:3rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center">
+        <div>
+          <div style="background:rgba(250,204,21,0.15);border:1px solid rgba(250,204,21,0.3);color:${d.accent};display:inline-block;padding:0.25rem 0.75rem;border-radius:4px;font-size:0.72rem;font-weight:700;margin-bottom:0.75rem">⚡ ESA CERTIFIED · FULLY LICENSED</div>
+          <h1 style="font-size:1.8rem;font-weight:900;line-height:1.2;margin-bottom:0.75rem">${d.tagline}</h1>
+          <p style="color:#a8a29e;font-size:0.87rem;line-height:1.65;margin-bottom:1.5rem">${d.about||'Your safety is our priority. Fully licensed, bonded and insured for residential and commercial work.'}</p>
+          <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+            <a href="tel:${d.phone}" style="background:${d.accent};color:#1c1917;padding:0.75rem 1.4rem;border-radius:7px;font-weight:800;text-decoration:none;font-size:0.87rem">📞 Get Free Quote</a>
+            <a href="#services" style="border:1px solid #44403c;color:#a8a29e;padding:0.75rem 1.4rem;border-radius:7px;font-weight:600;text-decoration:none;font-size:0.87rem">Our Services</a>
+          </div>
+        </div>
+        <div style="border-radius:12px;overflow:hidden;height:240px;border:2px solid rgba(250,204,21,0.2)">
+          <img src="https://images.unsplash.com/${d.heroImg}?w=500&h=240&q=80&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;opacity:0.85">
+        </div>
+      </div>
+      <div style="background:#fefce8;padding:1.25rem 2rem;display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;border-bottom:1px solid #fef08a">
+        ${['✓ Residential & Commercial','✓ Free Estimates','✓ Fully Insured','✓ Permit Work'].map(f=>`<span style="font-size:0.82rem;font-weight:700;color:#854d0e">${f}</span>`).join('')}
+      </div>
+      <div style="background:#fff;padding:2.5rem 2rem" id="services">
+        <h2 style="font-size:1.3rem;font-weight:800;text-align:center;margin-bottom:2rem">Electrical Services</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:0.85rem">
+          ${d.services.map(s=>`<div style="background:#fefce8;border:1px solid #fef08a;border-radius:9px;padding:1rem;display:flex;align-items:center;gap:0.6rem;border-left:4px solid ${d.accent}"><span>⚡</span><span style="font-size:0.82rem;font-weight:600">${s}</span></div>`).join('')}
+        </div>
+      </div>
+      <div style="background:${d.primary};color:#fff;padding:2.5rem;text-align:center">
+        <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:0.4rem;color:${d.accent}">Need an Electrician?</h2>
+        <p style="color:#78716c;font-size:0.85rem;margin-bottom:1.25rem">Available Mon–Sat · Emergency service · ${d.address||'Durham Region'}</p>
+        <a href="tel:${d.phone}" style="background:${d.accent};color:#1c1917;padding:0.8rem 2rem;border-radius:7px;font-weight:800;text-decoration:none">📞 ${d.phone||'Call Now'}</a>
+      </div>
+      <footer style="background:#0c0a09;color:#44403c;text-align:center;padding:1rem;font-size:0.78rem">© ${new Date().getFullYear()} ${d.name} · Licensed Electrician · ${d.address||'Durham Region'}</footer>`;
+    }
+  },
+
+  retail: {
+    primaryColor: '#701a75', accentColor: '#e879f9',
+    defaultServices: ['In-Store Shopping','Online Orders','Gift Cards','Custom Orders','Loyalty Program','Free Local Delivery'],
+    defaultTagline: 'Discover Something Uniquely Yours',
+    heroImg: 'photo-1441986300917-64674bd600d8',
+    render(d) {
+      return `<nav style="background:#fff;border-bottom:1px solid #fae8ff;padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between">
+        <div style="color:${d.primary};font-weight:900;font-size:1.1rem">${d.name}</div>
+        <div style="display:flex;gap:1.5rem;align-items:center">
+          ${['Shop','About','Contact'].map(l=>`<a href="#" style="color:#a21caf;font-size:0.82rem;font-weight:500;text-decoration:none">${l}</a>`).join('')}
+          <a href="tel:${d.phone}" style="background:${d.primary};color:#fff;padding:0.35rem 0.9rem;border-radius:99px;font-size:0.8rem;font-weight:600;text-decoration:none">Visit Us</a>
+        </div>
+      </nav>
+      <div style="position:relative;overflow:hidden;height:380px">
+        <img src="https://images.unsplash.com/${d.heroImg}?w=1200&h=380&q=80&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(112,26,117,0.78),rgba(112,26,117,0.25) 60%,transparent)"></div>
+        <div style="position:absolute;top:50%;left:2.5rem;transform:translateY(-50%);color:#fff;max-width:400px">
+          <div style="color:#f0abfc;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">📍 ${d.address||'Durham Region'}</div>
+          <h1 style="font-size:2.1rem;font-weight:900;line-height:1.2;margin-bottom:0.75rem">${d.tagline}</h1>
+          <p style="color:rgba(255,255,255,0.85);font-size:0.87rem;margin-bottom:1.5rem;line-height:1.6">${d.about||'Carefully curated collections for every style and occasion. Shop local, feel great.'}</p>
+          <a href="tel:${d.phone}" style="background:#fff;color:${d.primary};padding:0.75rem 1.5rem;border-radius:99px;font-weight:800;text-decoration:none;font-size:0.87rem">Shop Now →</a>
+        </div>
+      </div>
+      <div style="background:#fdf4ff;padding:1.25rem 2rem;display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;border-bottom:1px solid #fae8ff">
+        ${[`📍 ${d.address||'Durham Region'}`,`📞 ${d.phone||'Call us'}`,`🚚 Free Local Delivery`].map(i=>`<span style="font-size:0.82rem;font-weight:600;color:${d.primary}">${i}</span>`).join('')}
+      </div>
+      <div style="background:#fff;padding:2.5rem 2rem">
+        <h2 style="font-size:1.3rem;font-weight:800;text-align:center;margin-bottom:2rem;color:${d.primary}">What We Offer</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.85rem">
+          ${d.services.map(s=>`<div style="background:#fdf4ff;border:1px solid #fae8ff;border-radius:10px;padding:1rem;text-align:center"><div style="font-size:1.3rem;margin-bottom:0.4rem">🛍</div><div style="font-size:0.82rem;font-weight:600;color:${d.primary}">${s}</div></div>`).join('')}
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,${d.primary},#86198f);color:#fff;padding:2.5rem;text-align:center">
+        <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:0.5rem">Come Visit Us Today</h2>
+        <p style="color:#f0abfc;margin-bottom:1.25rem;font-size:0.87rem">${d.address||'Durham Region'} · ${d.phone||''}</p>
+        <a href="tel:${d.phone}" style="background:#fff;color:${d.primary};padding:0.8rem 1.75rem;border-radius:99px;font-weight:800;text-decoration:none">Get Directions →</a>
+      </div>
+      <footer style="background:#3b0764;color:#701a75;text-align:center;padding:1rem;font-size:0.78rem">© ${new Date().getFullYear()} ${d.name}</footer>`;
+    }
+  }
+};
+
+let currentTemplate = 'trades';
+let services = [];
+
+// SECTION TOGGLE
+function toggleSection(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// TEMPLATE SELECTION — loads unique defaults per industry
+function selectTemplate(id, el) {
+  document.querySelectorAll('.template-thumb').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  currentTemplate = id;
+  const tpl = TEMPLATES[id];
+  if (tpl) {
+    // Load default services if user hasn't added any
+    if (services.length === 0) {
+      services = [...tpl.defaultServices];
+      renderServices();
+    }
+    // Suggest industry-specific tagline if still on placeholder
+    const tagEl = document.getElementById('tagline');
+    if (!tagEl.value || tagEl.value === 'Fast, Reliable, Professional') {
+      tagEl.value = tpl.defaultTagline;
+    }
+    // Set industry-matched colors
+    document.getElementById('primaryColor').value = tpl.primaryColor;
+    document.getElementById('accentColor').value  = tpl.accentColor;
+  }
+  updatePreview();
+}
+
+// SERVICES
+function renderServices() {
+  const chips = document.getElementById('servicesChips');
+  chips.innerHTML = services.map((s, i) => `
+    <div class="service-chip">${s}
+      <button class="service-chip-remove" onclick="removeService(${i})" title="Remove">×</button>
+    </div>`).join('');
+}
+function addService() {
+  const input = document.getElementById('serviceInput');
+  const val = input.value.trim();
+  if (val && services.length < 8) {
+    services.push(val); input.value = '';
+    renderServices(); updatePreview();
+  }
+}
+function removeService(i) {
+  services.splice(i, 1); renderServices(); updatePreview();
+}
+
+// BUILD PREVIEW — calls the unique renderer for the selected template
+function buildPreviewHTML() {
+  const tpl = TEMPLATES[currentTemplate] || TEMPLATES.trades;
+  const data = {
+    name:    document.getElementById('brandName').value    || 'Your Business',
+    tagline: document.getElementById('tagline').value      || tpl.defaultTagline,
+    primary: document.getElementById('primaryColor').value || tpl.primaryColor,
+    accent:  document.getElementById('accentColor').value  || tpl.accentColor,
+    phone:   document.getElementById('phone').value        || '(905) 555-0100',
+    email:   document.getElementById('email').value        || '',
+    address: document.getElementById('address').value      || 'Durham Region, ON',
+    about:   document.getElementById('aboutText').value    || '',
+    services: services.length ? services : tpl.defaultServices,
+    heroImg:  tpl.heroImg
+  };
+  return `<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>${data.name}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;color:#1a1a1a;background:#fff}</style>
+  </head><body>${tpl.render(data)}</body></html>`;
+}
+
+// UPDATE PREVIEW
+function updatePreview() {
+  document.getElementById('preview-iframe').srcdoc = buildPreviewHTML();
+  document.getElementById('previewTitle').textContent =
+    document.getElementById('brandName').value || 'Your Business';
+}
+
+// DEVICE MODES
+function setDevice(device, btn) {
+  document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const iframe = document.getElementById('preview-iframe');
+  iframe.classList.remove('mobile-view', 'tablet-view');
+  if (device === 'mobile') iframe.classList.add('mobile-view');
+  if (device === 'tablet') iframe.classList.add('tablet-view');
+}
+
+// FULL SCREEN PREVIEW
+function openFullPreview() {
+  const win = window.open('', '_blank');
+  win.document.write(buildPreviewHTML());
+  win.document.close();
+}
+
+// SAVE DEMO
+function saveDemo() {
+  const name = document.getElementById('brandName').value.trim();
+  if (!name || name === 'Your Business Name') {
+    showToast('Please enter your business name first', 'error'); return;
+  }
+  fetch('/builder/save', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      template_id:     currentTemplate,
+      brand_name:      document.getElementById('brandName').value,
+      tagline:         document.getElementById('tagline').value,
+      primary_color:   document.getElementById('primaryColor').value,
+      secondary_color: document.getElementById('accentColor').value,
+      services,
+      phone:   document.getElementById('phone').value,
+      email:   document.getElementById('email').value,
+      address: document.getElementById('address').value,
+      about_text: document.getElementById('aboutText').value
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if (res.success) showToast('✓ Saved! Link: ' + res.url, 'success', 6000);
+    else showToast(res.error || 'Save failed', 'error');
+  })
+  .catch(() => showToast('Network error', 'error'));
+}
+
+// Init — load first template defaults
+const firstTpl = TEMPLATES[currentTemplate];
+services = [...firstTpl.defaultServices];
+document.getElementById('tagline').value       = firstTpl.defaultTagline;
+document.getElementById('primaryColor').value  = firstTpl.primaryColor;
+document.getElementById('accentColor').value   = firstTpl.accentColor;
+renderServices();
+updatePreview();
+
+// Auto-detect industry from URL param: ?industry=salon
+const urlParams = new URLSearchParams(window.location.search);
+const industry = urlParams.get('industry');
+if (industry) {
+  const matchKey = Object.keys(TEMPLATES).find(k => k === industry.toLowerCase()) || 'trades';
+  const thumb = document.querySelector(`[data-template="${matchKey}"]`);
+  if (thumb) { services = []; selectTemplate(matchKey, thumb); }
+}
+</script>

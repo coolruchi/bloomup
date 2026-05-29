@@ -1,0 +1,11 @@
+<%- include('../partials/header', { title: code + ' Error' }) %>
+<div style="min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;margin-top:68px">
+  <div>
+    <div style="font-size:5rem;margin-bottom:1rem"><%= code === 404 ? '🔍' : '⚠️' %></div>
+    <h1 style="font-size:4rem;font-weight:800;color:var(--text-muted);margin-bottom:0.5rem"><%= code %></h1>
+    <h2 style="margin-bottom:1rem"><%= code === 404 ? 'Page Not Found' : 'Something went wrong' %></h2>
+    <p style="color:var(--text-secondary);margin-bottom:2rem;max-width:400px"><%= message %></p>
+    <a href="/" class="btn btn-primary btn-lg">← Back to BloomUp</a>
+  </div>
+</div>
+<%- include('../partials/footer') %>

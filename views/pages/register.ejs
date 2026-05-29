@@ -1,0 +1,41 @@
+<%- include('../partials/header', { title: 'Create Account' }) %>
+<div class="auth-layout">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <a href="/" class="nav-logo" style="display:inline-flex;justify-content:center">
+        <div class="nav-logo-mark">🌱</div> Bloom<span style="color:var(--bloom-accent)">Up</span>
+      </a>
+    </div>
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-sub">Free forever — save your demos, revisit anytime</p>
+
+    <% if (locals.error) { %><div class="alert alert-error"><%= error %></div><% } %>
+
+    <form action="/auth/register" method="POST">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="full_name" class="form-input" placeholder="Your name" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-input" placeholder="Min. 8 characters" required minlength="8" autocomplete="new-password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Business Name <span style="color:var(--text-muted)">(optional)</span></label>
+        <input type="text" name="business_name" class="form-input" placeholder="Your business">
+      </div>
+      <input type="hidden" name="redirect" value="<%= locals.redirect || '' %>">
+      <button type="submit" class="btn btn-primary w-full btn-lg">Create Free Account →</button>
+    </form>
+
+    <div class="auth-divider">or</div>
+    <p style="text-align:center;font-size:0.88rem;color:var(--text-muted)">
+      Already have an account? <a href="/auth/login">Sign in →</a>
+    </p>
+  </div>
+</div>
+<%- include('../partials/footer') %>
